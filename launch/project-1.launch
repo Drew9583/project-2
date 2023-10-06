@@ -1,25 +1,26 @@
 <!-- Modified version of turtlebot_world.launch -->
 <launch>
-  <!-- Put name of world file here -->
-  <arg name="world_file"  default="/home/robot/catkin_ws/src/project-1/world/room.world"/>
+  <!-- Turtlebot -->
+  <arg name="base"              default="$(env TURTLEBOT_BASE)"         doc="mobile base type [create, roomba]"/>
+  <arg name="battery"           default="$(env TURTLEBOT_BATTERY)"      doc="kernel provided locatio for battery info, use /proc/acpi/battery/BAT0 in 2.6 or earlier kernels." />
+  <arg name="stacks"            default="$(env TURTLEBOT_STACKS)"       doc="stack type displayed in visualisation/simulation [circles, hexagons]"/>
+  <arg name="3d_sensor"         default="$(env TURTLEBOT_3D_SENSOR)"    doc="3d sensor types [kinect, asux_xtion_pro]"/>
+  <arg name="simulation"        default="$(env TURTLEBOT_SIMULATION)"   doc="set flags to indicate this turtle is run in simulation mode."/>
+  <arg name="serialport"        default="$(env TURTLEBOT_SERIAL_PORT)"  doc="used by create to configure the port it is connected on [/dev/ttyUSB0, /dev/ttyS0]"/>
 
-  <arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/> <!-- create, roomba -->
-  <arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 --> 
-  <arg name="gui" default="true"/>
-  <arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons --> 
-  <arg name="3d_sensor" value="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro --> 
+  <param name="/use_sim_time" value="$(arg simulation)"/>
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="use_sim_time" value="true"/>
-    <arg name="debug" value="false"/>
-    <arg name="gui" value="$(arg gui)" />
-    <arg name="world_name" value="$(arg world_file)"/>
+  <include file="$(find turtlebot_bringup)/launch/includes/robot.launch.xml">
+    <arg name="base" value="$(arg base)" />
+    <arg name="stacks" value="$(arg stacks)" />
+    <arg name="3d_sensor" value="$(arg 3d_sensor)" />
   </include>
-  
-  <include file="$(find turtlebot_gazebo)/launch/includes/$(arg base).launch.xml">
-    <arg name="base" value="$(arg base)"/>
-    <arg name="stacks" value="$(arg stacks)"/>
-    <arg name="3d_sensor" value="$(arg 3d_sensor)"/>
+  <include file="$(find turtlebot_bringup)/launch/includes/mobile_base.launch.xml">
+    <arg name="base" value="$(arg base)" />
+    <arg name="serialport" value="$(arg serialport)" />
+  </include>
+  <include unless="$(eval arg('battery') == 'None')" file="$(find turtlebot_bringup)/launch/includes/netbook.launch.xml">
+    <arg name="battery" value="$(arg battery)" />
   </include>
   
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
