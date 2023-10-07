@@ -226,7 +226,7 @@ int main(int argc, char **argv) {
 				ros::spinOnce(); // processes pending ROS messages and/or callbacks
 			}
 		}
-		else if(wallDistance < 1){ // escape symmetric obstacles if avoid did not work
+		else if(wallDistance < 1.5){ // escape symmetric obstacles if avoid did not work
 			cmd_vel_msg.angular.z = 0.5;
 
 			double turn_duration = 6.28;
