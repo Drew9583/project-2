@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(project-1)
+project(project-2)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -134,7 +134,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 ## add_executable(project-1_node src/teleop.cpp src/move.cpp)
-add_executable(project-1_node src/robot.cpp)
+add_executable(project-2_node src/robot.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -147,7 +147,7 @@ add_executable(project-1_node src/robot.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(project-1_node
+target_link_libraries(project-2_node
   ${catkin_LIBRARIES}
 )
 
